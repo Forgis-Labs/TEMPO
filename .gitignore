@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environment
+.venv/
+
+# Runtime data and checkpoints (pulled from S3 or generated locally)
+/data/
+/checkpoints/*
+!/checkpoints/.gitkeep
+!/checkpoints/fsq_transformer_rope_625_best.pt
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local-only
+.env
+tmp/
+paper/
+results/
+
+# SageMaker upload staging (built at launch time)
+_sagemaker_src/

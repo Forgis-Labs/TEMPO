@@ -1,0 +1,77 @@
+# TEMPO Phase 1 — Optimized for 8x H100 (SageMaker ml.p5.48xlarge or similar)
+#
+# Key optimizations vs previous run:
+#   1. Pre-tokenized text (no per-batch tokenizer calls) — 3-5x speedup
+#   2. Length-grouped batching (reduces padding waste ~50-70%)
+#   3. num_workers=4 (parallel data loading)
+#   4. batch_size=8, grad_accum=4 (lower accum = fewer fwd passes per step)
+#   5. val batch_size matches train (was 1 before)
+#
+# Expected: ~45-90 min/epoch (was ~4 hours)
+#
+# Launch:
+#   python tempo/launch_sagemaker.py \
+#     --config tempo/configs/phase1_optimized_8xH100.yaml \
+#     --skip_phase0 --spot
+
+# ── SageMaker / Infra ────────────────────────────────────────────────
+sagemaker:
+  bucket: ""  # set via SAGEMAKER_BUCKET env var or --bucket CLI flag
+  region: us-east-2
+  role: ""    # set via SAGEMAKER_ROLE_ARN env var or --role CLI flag
+  instance: ml.p5.48xlarge    # 8x H100 80GB
+  spot: true
+  s3_prefix: tempo
+  job_name: tempo-phase1-optimized
+
+# ── Model ────────────────────────────────────────────────────────────
+model:
+  llm_id: Qwen/Qwen3-1.7B
+  tokenizer: fsq_transformer_rope
+  fsq_ckpt: fsq_transformer_rope_625_best.pt
+  lora_r: 32
+  lora_alpha: 64
+  use_dora: true
+
+# ── Training ─────────────────────────────────────────────────────────
+training:
+  # Per-GPU batch × GPUs × grad_accum = effective batch
+  # 8 × 8 × 4 = 256 (half of previous 512, faster convergence per wall-clock)
+  batch_size: 8
+  grad_accum: 4
+  num_workers: 4
+
+  # Phase 1
+  phase1_epochs: 10
+  phase1_lr: 2.0e-5
+  phase1_embed_lr: null       # same as phase1_lr
+  phase1_patience: 3
+  warmup_frac: 0.10
+
+  # Packing — disabled (was causing issues)
+  use_packing: false
+  pack_length: 1024
+
+# ── Phase selection ──────────────────────────────────────────────────
+phases:
+  skip_phase0: true
+  phase0_only: false
+  # Resume from phase 0 checkpoint
+  checkpoint: phase0_best.pt   # in s3://{bucket}/{s3_prefix}/checkpoints/
+
+# ── FSDP ─────────────────────────────────────────────────────────────
+fsdp:
+  sharding_strategy: FULL_SHARD
+  auto_wrap_policy: TRANSFORMER_BASED_WRAP
+  backward_prefetch: BACKWARD_PRE
+  state_dict_type: FULL_STATE_DICT
+  offload_params: false
+  use_orig_params: true
+  sync_module_states: true
+  cpu_ram_efficient_loading: true
+
+# ── Environment ──────────────────────────────────────────────────────
+environment:
+  PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
+  NCCL_DEBUG: WARN
+  TOKENIZERS_PARALLELISM: "false"    # avoid fork warning with num_workers>0
