@@ -2,11 +2,17 @@
 
 **Time Series Understanding via Discrete Tokenization.**
 
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 TEMPO is a backbone-agnostic framework that turns any decoder-only LLM into a
 time-series reasoner. Signals are encoded into discrete tokens by a small
-quantizer (FSQ, FSQ-Transformer-RoPE, or TOTEM), aligned with the LLM's
+FSQ-Transformer quantizer, aligned with the LLM's
 embedding space in a Phase-0 pass, and trained to answer questions, classify
-patterns, or forecast in a Phase-1 pass.
+patterns in a Phase-1 pass.
+
+![TEMPO Architecture](assets/architecture.png)
 
 ---
 
@@ -40,9 +46,6 @@ model = tempo.TEMPO.from_pretrained(
 
 # Free-form analysis
 answer = model.analyze(signal, question="Describe the trend in this signal.")
-
-# Forecasting
-forecast = model.forecast(signal, max_codes=64)
 ```
 
 ### CLI
@@ -102,9 +105,9 @@ Three components, trained in sequence:
 1. **Tokenizer** (small, frozen after pre-training).
    A 1.6 M-parameter encoder/decoder maps a window of normalised real-valued
    samples to a sequence of discrete codes. The shipped tokenizer is
-   FSQ-Transformer-RoPE with `levels = [5,5,5,5]` → **625 codes**, 4:1
-   compression. Alternatives in [tempo/tokenizer/](tempo/tokenizer/):
-   FSQ (CNN encoder), FSQ-Transformer (no RoPE), and TOTEM (VQ-VAE).
+   FSQ-Transformer with `levels = [5,5,5,5]` → **625 codes**, 4:1
+   compression. Additional tokenizers explored in [tempo/tokenizer/](tempo/tokenizer/):
+   FSQ (CNN encoder), FSQ-Transformer-RoPE, and TOTEM (VQ-VAE).
 
 2. **Phase 0 — Alignment.** The LLM is frozen and only a small projection
    (and optionally a thin LoRA / DoRA adapter) is trained so that the
@@ -116,9 +119,6 @@ Three components, trained in sequence:
    conditioned on `<TS> code1 code2 … codeN </TS>` segments inlined into
    the chat template.
 
-The curriculum runner in [tempo/train/curriculum.py](tempo/train/curriculum.py)
-chains five stages (`stage1_mcq → stage2_captioning → stage3_cot →
-stage4_sleep_cot → stage5_ecg_cot`) with early stopping per stage.
 
 ---
 
@@ -157,35 +157,6 @@ python scripts/data/build_pretokenized_parquets.py \
     --output-dir data/pretokenized
 ```
 
----
-
-## Configuration
-
-Training launchers (run outside this repo or via `tempo.train.run_pipeline`)
-read AWS infrastructure and third-party tokens from environment variables.
-A `.env` at the repo root is auto-loaded.
-
-| Variable             | Purpose                                              |
-| -------------------- | ---------------------------------------------------- |
-| `SAGEMAKER_BUCKET`   | S3 bucket for data, checkpoints, and job outputs     |
-| `SAGEMAKER_ROLE_ARN` | IAM role assumed by SageMaker training jobs          |
-| `WANDB_API_KEY`      | (optional) Weights & Biases logging                  |
-| `HF_TOKEN`           | (optional) HuggingFace Hub auth for gated models     |
-| `OPENAI_API_KEY`     | (optional) GPT baseline + bearing qualitative demo   |
-
-```bash
-# .env
-SAGEMAKER_BUCKET=my-tempo-bucket
-SAGEMAKER_ROLE_ARN=arn:aws:iam::123456789012:role/SageMakerExecution
-WANDB_API_KEY=...
-HF_TOKEN=...
-```
-
-The YAMLs under `configs/` do not hardcode bucket or role — both are
-expected to come from env vars or CLI flags.
-
----
-
 ## Evaluation
 
 ```python
@@ -199,24 +170,17 @@ print(result.accuracy, result.f1_macro)
 sensitivity_test(model, test_dataset)
 ```
 
-Baselines live in [tempo/eval/](tempo/eval/):
-[`gpt_baseline`](tempo/eval/gpt_baseline.py) (zero/few-shot GPT-4 on the
-same prompts), [`chatts_baseline`](tempo/eval/chatts_baseline.py)
-(ChatTS-8B), and [`embedding_probe`](tempo/eval/embedding_probe.py)
-(linear probes over the LLM's token embeddings).
-
----
-
 ## License
 
-MIT. See [pyproject.toml](pyproject.toml).
+[CC BY-NC 4.0](LICENSE) — free for research and non-commercial use.
+For commercial licensing, contact [riccardo.maggioni@forgis.com](mailto:riccardo.maggioni@forgis.com).
 
 ## Citation
 
 ```bibtex
 @misc{forgis2026tempo,
   title  = {TEMPO: Time Series Understanding via Discrete Tokenization},
-  author = {Forgis Labs},
+  author = {Forgis},
   year   = {2026},
   url    = {https://github.com/Forgis-Labs/TEMPO},
 }
