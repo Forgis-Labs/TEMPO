@@ -14,6 +14,9 @@ patterns in a Phase-1 pass.
 
 ![TEMPO Architecture](assets/architecture.png)
 
+> [!IMPORTANT]
+> **Work in progress.** Full model checkpoints and training code coming soon.
+
 ---
 
 ## Install
