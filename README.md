@@ -1,12 +1,9 @@
 # TEMPO: Time Series Understanding via Discrete Tokenization
 
 [![Website](https://img.shields.io/badge/Website-forgis.com-orange)](https://www.forgis.com)
-**Time Series Understanding via Discrete Tokenization.**
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-
-**Team:** Riccardo Maggioni, Yanis Merzouki
 
 TEMPO is a backbone-agnostic framework that turns any decoder-only LLM into a time-series reasoner. Signals are encoded into discrete tokens by a small FSQ-Transformer quantizer, aligned with the LLM's embedding space in a Phase 0 pass, and trained to answer questions and classify patterns in a Phase 1 pass.
 
