@@ -30,7 +30,7 @@ from typing import Any
 import torch
 
 import os as _os
-_trainer_version = _os.environ.get("SHRIKE_TRAINER", "v2")
+_trainer_version = _os.environ.get("TEMPO_TRAINER", "v2")
 if _trainer_version == "v1":
     from .trainer import train
 else:
@@ -83,19 +83,14 @@ class PipelineConfig:
         # Env vars override defaults
         if not self.phase0_data:
             self.phase0_data = os.environ.get(
-                "SHRIKE_PHASE0_DATA",
-                os.environ.get("SM_CHANNEL_PHASE0", "data/pretokenized/stage0_alignment"),
+                "TEMPO_PHASE0_DATA", "data/pretokenized/stage0_alignment",
             )
         if not self.phase1_data:
             self.phase1_data = os.environ.get(
-                "SHRIKE_PHASE1_DATA",
-                os.environ.get("SM_CHANNEL_PHASE1", "data/pretokenized/stage1_base"),
+                "TEMPO_PHASE1_DATA", "data/pretokenized/stage1_base",
             )
         if not self.output_dir or self.output_dir == "results":
-            self.output_dir = os.environ.get(
-                "SM_MODEL_DIR",
-                os.environ.get("SHRIKE_OUTPUT_DIR", "results"),
-            )
+            self.output_dir = os.environ.get("TEMPO_OUTPUT_DIR", "results")
 
 
 def run_pipeline(model, config: PipelineConfig) -> dict[str, Any]:

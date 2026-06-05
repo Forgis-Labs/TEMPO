@@ -2,18 +2,13 @@
 
 Uses the existing data builders (build_alignment_dataset for phase0,
 stage1_unified for phase1), tokenizes all time series with the specified
-tokenizer, and saves as parquet files ready for SageMaker.
+tokenizer, and saves as parquet files ready for training.
 
 Usage:
-    # Build with RoPE tokenizer
-    uv run python tempo/build_pretokenized_parquets.py \
-        --tokenizer fsq_transformer_rope \
-        --tokenizer-ckpt checkpoints/tokenizers/fsq_transformer_rope_625_best.pt \
-        --output-dir data/pretokenized_rope
-
-    # Then upload to S3
-    aws s3 sync data/pretokenized_rope/phase0 s3://<your-s3-bucket>/tempo/phase0/
-    aws s3 sync data/pretokenized_rope/phase1 s3://<your-s3-bucket>/tempo/phase1/
+    uv run python scripts/data/build_pretokenized_parquets.py \
+        --tokenizer fsq_transformer \
+        --tokenizer-ckpt checkpoints/fsq_transformer_rope_625_best.pt \
+        --output-dir data/pretokenized
 """
 
 import argparse
@@ -28,12 +23,8 @@ import pyarrow.parquet as pq
 import torch
 from tqdm.auto import tqdm
 
-# Path bootstrap: add project root for `tempo.*` imports, and the parent
-# OpenTSLM directory's src/ for `from opentslm import ...`.
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-PARENT_ROOT = PROJECT_ROOT.parent  # OpenTSLM root (has src/opentslm)
 sys.path.insert(0, str(PROJECT_ROOT))
-sys.path.insert(0, str(PARENT_ROOT / "src"))
 
 
 def load_tokenizer(tokenizer_type: str, ckpt_path: str, device: str = "cpu"):
@@ -292,7 +283,6 @@ def main():
     # Phase 0 sizing
     parser.add_argument("--phase0-m4", type=int, default=10000)
     parser.add_argument("--phase0-sensor", type=int, default=20000)
-    parser.add_argument("--phase0-opentslm", type=int, default=10000)
     parser.add_argument("--phase0-synthetic", type=int, default=10000)
     parser.add_argument("--phase0-ucr", type=int, default=500)
     # Phase 1 sizing
@@ -397,7 +387,6 @@ def main():
             phase0_hf = build_alignment_dataset(
                 max_m4=args.phase0_m4,
                 max_hf_sensor=args.phase0_sensor,
-                max_opentslm=args.phase0_opentslm,
                 max_synthetic=args.phase0_synthetic,
                 max_ucr=args.phase0_ucr,
                 seed=args.seed,
@@ -415,7 +404,7 @@ def main():
         print("-" * 40)
         # Collect raw samples directly (bypass HF Dataset Arrow conversion)
         from tempo.data.stage1_unified import (
-            load_tsqa, load_engine_qa, load_opentslm_cot, load_text_instructions,
+            load_tsqa, load_engine_qa, load_text_instructions,
         )
         from tempo.data.stage1 import load_m4_captions
         import random as _random
@@ -430,7 +419,6 @@ def main():
         #   TSQA 139K + HAR 68K + Bearing 5K (vision) + Sleep 9K
         #   + PAMAP2 20K + Engine 13K + text 50K ≈ 304K
         tsqa_cap = 139000
-        cot_cap = 999999      # uncapped — ECG removed, remaining sources are reasonable
         engine_cap = 20000
         text_cap = 50000
 
@@ -445,10 +433,6 @@ def main():
                 engine_h5 = p
                 break
         all_samples.extend(load_engine_qa(engine_cap, args.seed, h5_path=engine_h5))
-
-        # OpenTSLM CoT — capped at 40K per source
-        # Sleep has only ~9K (uses all), others capped from 68-159K to 40K
-        all_samples.extend(load_opentslm_cot(cot_cap, args.seed))
 
         # Text instructions — fixed at 50K
         all_samples.extend(load_text_instructions(text_cap, args.seed))
@@ -481,13 +465,6 @@ def main():
     if build_phase1:
         print(f"  Phase 1: {p1_total} samples -> {os.path.join(args.output_dir, 'phase1')}")
 
-    bucket = os.environ.get("SAGEMAKER_BUCKET", "")
-    print(f"\nUpload to S3:")
-    if build_phase0:
-        print(f"  aws s3 sync {phase0_dir} s3://{bucket}/tempo/phase0/")
-    if build_phase1:
-        print(f"  aws s3 sync {phase1_dir} s3://{bucket}/tempo/phase1/")
-    print(f"  aws s3 cp {args.tokenizer_ckpt} s3://{bucket}/tempo/tokenizer/")
 
 
 if __name__ == "__main__":

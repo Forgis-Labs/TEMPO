@@ -1,12 +1,12 @@
 """Training utilities for TEMPO.
 
-Default trainer is v2 (SFTTrainer + DDP). Set SHRIKE_TRAINER=v1 to use
+Default trainer is v2 (SFTTrainer + DDP). Set TEMPO_TRAINER=v1 to use
 the old Accelerate trainer.
 """
 
 import os
 
-_trainer_version = os.environ.get("SHRIKE_TRAINER", "v2")
+_trainer_version = os.environ.get("TEMPO_TRAINER", "v2")
 
 if _trainer_version == "v1":
     from .trainer import train

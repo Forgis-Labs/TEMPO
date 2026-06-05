@@ -259,24 +259,11 @@ def train(
     if augment:
         from .augment import augment_ts
 
-    # Checkpoint directory — SageMaker auto-syncs this to S3
-    ckpt_dir = os.environ.get("SM_HP_CHECKPOINT_DIR",
-               os.environ.get("CHECKPOINT_DIR", "/opt/ml/checkpoints"))
-    # Create a job-specific subfolder with clear naming
-    job_name = os.environ.get("SAGEMAKER_JOB_NAME",
-               os.environ.get("SM_HP_SAGEMAKER_JOB_NAME", "local"))
-    ckpt_job_dir = Path(ckpt_dir) / job_name
-    if is_main:
-        ckpt_job_dir.mkdir(parents=True, exist_ok=True)
-        print(f"  Checkpoints -> {ckpt_job_dir}  (synced to S3)")
-
     # Resume from mid-epoch checkpoint if available (spot recovery).
-    # Uses accelerator.save_state/load_state so all ranks stay in sync
-    # (works on both shared and non-shared filesystems).
     start_epoch = 1
     skip_batches = 0
-    mid_ckpt_dir = ckpt_job_dir / "mid_epoch_state"
-    mid_ckpt_meta = ckpt_job_dir / "mid_epoch_meta.pt"
+    mid_ckpt_dir = out / "mid_epoch_state"
+    mid_ckpt_meta = out / "mid_epoch_meta.pt"
     if mid_ckpt_dir.exists() and mid_ckpt_meta.exists():
         if is_main:
             print(f"  Resuming from {mid_ckpt_dir}...", flush=True)
@@ -402,19 +389,18 @@ def train(
             # Save to output dir (local)
             torch.save(epoch_state, Path(output_dir) / "last_model.pt")
 
-            # Save every epoch to checkpoint dir with clear naming (synced to S3)
             phase_tag = "phase0" if align_only else "phase1"
             epoch_name = f"{phase_tag}_epoch{epoch}_val{avg_val:.4f}.pt" if has_val \
                     else f"{phase_tag}_epoch{epoch}_train{avg_train:.4f}.pt"
-            torch.save(epoch_state, ckpt_job_dir / epoch_name)
-            print(f"  -> Saved {epoch_name} to S3 checkpoint dir")
+            torch.save(epoch_state, out / epoch_name)
+            print(f"  -> Saved {epoch_name}")
 
             # Track best + early stopping
             if has_val and avg_val < best_val - 1e-4:
                 best_val = avg_val
                 patience_left = patience
-                torch.save(epoch_state, Path(output_dir) / "best_model.pt")
-                torch.save(epoch_state, ckpt_job_dir / f"{phase_tag}_best.pt")
+                torch.save(epoch_state, out / "best_model.pt")
+                torch.save(epoch_state, out / f"{phase_tag}_best.pt")
                 print(f"  -> New best (val={avg_val:.4f})")
             elif has_val:
                 patience_left -= 1

@@ -2,7 +2,7 @@
 
 **Time Series Understanding via Discrete Tokenization.**
 
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
@@ -73,34 +73,6 @@ uv run --with gradio python scripts/demos/demo_gradio.py \
 
 ---
 
-## Repository Layout
-
-```
-tempo/                    Main package
-├── model/                TEMPO model + tokenizer adapters
-├── tokenizer/            FSQ, FSQ-Transformer, FSQ-Transformer-RoPE, TOTEM
-├── data/                 Dataset builders (TSQA, M4 captions, UCR, templates)
-├── train/                Phase 0/1 + curriculum trainer, parquet datasets
-├── eval/                 Evaluators, scorer, sensitivity, baselines
-└── analysis/             Domain-specific probes (ECG, sleep, walking)
-
-scripts/
-├── demos/                demo_gradio.py, demo_bearing_qualitative.py
-├── data/                 build_pretokenized_parquets.py, explore_dataset.py
-├── estimate_training_time.py
-└── setup_vm.sh           Lambda Cloud H100 bootstrap
-
-configs/
-├── accelerate/           DDP / FSDP / single-GPU launch configs
-├── pipeline_4B.yaml      Reference end-to-end Phase 0+1 pipeline (Qwen3-4B)
-└── phase1_optimized_8xH100.yaml   Phase 1 on 8×H100 with FSDP
-
-checkpoints/
-└── fsq_transformer_rope_625_best.pt   Shipped tokenizer (4096 codes, 4:1 ratio)
-```
-
----
-
 ## Architecture
 
 Three components, trained in sequence:
@@ -127,8 +99,7 @@ Three components, trained in sequence:
 
 ## Training pipelines
 
-The package supports two trainer backends, selected via `SHRIKE_TRAINER`
-(historical name, kept for backwards-compat):
+The package supports two trainer backends, selected via `TEMPO_TRAINER`:
 
 | Backend           | Driver                                                 | When to use                         |
 | ----------------- | ------------------------------------------------------ | ----------------------------------- |

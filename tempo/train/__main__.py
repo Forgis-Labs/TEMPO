@@ -15,8 +15,6 @@ Usage:
     python -m tempo.train single \
         --data data/pretokenized/stage1_base --checkpoint phase0/best_model.pt
 
-    # SageMaker (auto-reads SM_CHANNEL_* env vars):
-    python -m tempo.train pipeline --tokenizer fsq_transformer --fsq_ckpt /opt/ml/input/tokenizer.pt
 """
 
 import argparse
@@ -37,9 +35,9 @@ def main():
     pp = sub.add_parser("pipeline", help="Run 2-phase training (alignment + training)")
     _add_model_args(pp)
     pp.add_argument("--phase0_data", default="",
-                    help="Phase 0 alignment data dir (default: env SHRIKE_PHASE0_DATA)")
+                    help="Phase 0 alignment data dir (default: env TEMPO_PHASE0_DATA)")
     pp.add_argument("--phase1_data", default="",
-                    help="Phase 1 training data dir (default: env SHRIKE_PHASE1_DATA)")
+                    help="Phase 1 training data dir (default: env TEMPO_PHASE1_DATA)")
     pp.add_argument("--skip_phase0", action="store_true",
                     help="Skip alignment phase (resume from phase0 checkpoint)")
     pp.add_argument("--phase0_lr", type=float, default=1e-3)

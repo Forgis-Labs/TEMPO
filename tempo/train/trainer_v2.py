@@ -14,7 +14,7 @@ Usage:
     from tempo.train.trainer_v2 import train
     result = train(model, dataset, output_dir="results/stage1")
 
-    # Multi-GPU (launched by SageMaker with torch_distributed):
+    # Multi-GPU with torchrun:
     torchrun --nproc_per_node=8 script.py
 """
 
