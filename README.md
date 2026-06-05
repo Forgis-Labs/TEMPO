@@ -94,4 +94,5 @@ print(result.accuracy, result.f1_macro)
 
 ## License
 
-Copyright (c) 2026, Forgis Labs. All rights reserved. Licensed under the [Forgis Source Code License (Non-Commercial)](LICENSE.txt).
+[CC BY-NC-SA 4.0](LICENSE) — free for research and non-commercial use.
+For commercial licensing, contact [riccardo.maggioni@forgis.com](mailto:riccardo.maggioni@forgis.com).
