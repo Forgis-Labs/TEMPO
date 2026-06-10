@@ -203,10 +203,6 @@ def train(
     if wandb_project and is_main:
         os.environ["WANDB_PROJECT"] = wandb_project
 
-    # We need BOTH packing (efficiency) AND completion-only masking (loss only
-    # on assistant response). SFTTrainer rejects custom data collators when
-    # packing is enabled, so we override compute_loss() to post-process labels
-    # after the packing pipeline assembles packed sequences.
     # Handles multiple samples per packed sequence.
 
     response_template_ids = model.tokenizer.encode(

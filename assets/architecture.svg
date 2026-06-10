@@ -1,0 +1,596 @@
+﻿<svg viewBox="0 0 1200 1340" xmlns="http://www.w3.org/2000/svg">
+<style>
+text { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
+.mono { font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace; }
+.title { font-weight: 600; letter-spacing: 0.04em; }
+.eyebrow { font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+</style>
+
+  <!-- ================================================================= -->
+  <!--  DEFINITIONS                                                       -->
+  <!-- ================================================================= -->
+  <defs>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#FF5A00"/>
+    </marker>
+    <marker id="arrow-orange-lg" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#FF5A00"/>
+    </marker>
+    <marker id="arrow-navy" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#122128"/>
+    </marker>
+    <marker id="arrow-white" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#FFFFFF"/>
+    </marker>
+
+    <symbol id="icon-bearing" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="7"    fill="none" stroke="#FF5A00" stroke-width="1"/>
+      <circle cx="8" cy="8" r="2.4"  fill="#FF5A00"/>
+      <circle cx="8" cy="2.5" r="1"  fill="#FF5A00"/>
+      <circle cx="8" cy="13.5" r="1" fill="#FF5A00"/>
+      <circle cx="2.5" cy="8" r="1"  fill="#FF5A00"/>
+      <circle cx="13.5" cy="8" r="1" fill="#FF5A00"/>
+    </symbol>
+    <symbol id="icon-lock" viewBox="0 0 12 14">
+      <path d="M3.5 6 V4.2 a2.5 2.5 0 0 1 5 0 V6"
+            fill="none" stroke="#6B767D" stroke-width="1.2" stroke-linecap="round"/>
+      <rect x="1.5" y="6" width="9" height="7" rx="1.4" fill="#6B767D"/>
+      <circle cx="6" cy="9.5" r="0.8" fill="#FFFFFF"/>
+    </symbol>
+    <symbol id="icon-stack" viewBox="0 0 14 14">
+      <ellipse cx="7" cy="3"  rx="5.5" ry="1.6" fill="none" stroke="#6B767D" stroke-width="1.1"/>
+      <path d="M1.5 3 v3.5 a5.5 1.6 0 0 0 11 0 V3"     fill="none" stroke="#6B767D" stroke-width="1.1"/>
+      <path d="M1.5 6.5 v3.5 a5.5 1.6 0 0 0 11 0 V6.5" fill="none" stroke="#6B767D" stroke-width="1.1"/>
+      <path d="M1.5 10 v1.5 a5.5 1.6 0 0 0 11 0 V10"   fill="none" stroke="#6B767D" stroke-width="1.1"/>
+    </symbol>
+    <symbol id="icon-spark" viewBox="0 0 12 12">
+      <path d="M6 0.5 L7 4.5 L11 5.5 L7 6.5 L6 10.5 L5 6.5 L1 5.5 L5 4.5 Z" fill="#FF5A00"/>
+    </symbol>
+    <symbol id="icon-tag" viewBox="0 0 14 14">
+      <path d="M1 7 V2 a1 1 0 0 1 1 -1 H7 L13 7 L7 13 L1 7 Z"
+            fill="none" stroke="#FF9030" stroke-width="1.2" stroke-linejoin="round"/>
+      <circle cx="3.5" cy="3.5" r="0.8" fill="#FF9030"/>
+    </symbol>
+    <symbol id="icon-quote" viewBox="0 0 16 16">
+      <path d="M0 9 V5 C0 2.5 1.5 1 4 1 L4.5 2.4 C3 2.6 2.2 3.4 2.2 4.8 H4 V9 H0 Z
+               M9 9 V5 C9 2.5 10.5 1 13 1 L13.5 2.4 C12 2.6 11.2 3.4 11.2 4.8 H13 V9 H9 Z"
+            fill="#FF5A00"/>
+    </symbol>
+  </defs>
+
+
+  <!-- ================================================================= -->
+  <!--  PANEL A — SIGNAL TOKENIZER  (horizontal)                          -->
+  <!-- ================================================================= -->
+  <rect x="20" y="20" width="1160" height="420" rx="10" fill="#FAFBFC" stroke="#E2E6EA" stroke-width="1"/>
+
+  <!-- Header -->
+  <g transform="translate(44, 44)">
+    <rect x="0" y="0" width="22" height="22" rx="4" fill="#122128"/>
+    <text x="11" y="16" text-anchor="middle" class="mono" font-size="12" font-weight="600" fill="#FF9030">A</text>
+  </g>
+  <text x="76" y="61" class="title" font-size="16" fill="#1B2730">Signal Tokenizer</text>
+  <text x="76" y="79" class="eyebrow" font-size="10" fill="#6B767D">PATCH · ENCODE · QUANTIZE</text>
+
+
+  <!-- Section 1: Raw signal (waveform plate spans y=100-390, matching FSQ) ====== -->
+  <rect x="44" y="100" width="276" height="290" rx="6"
+        fill="#FFFFFF" stroke="#ECEFF2" stroke-width="1"/>
+
+  <!-- Source label inside plate (top) -->
+  <use href="#icon-bearing" x="56" y="114" width="14" height="14"/>
+  <text x="76" y="125" font-size="11" fill="#6B767D">CWRU bearing vibration</text>
+
+  <!-- Center line -->
+  <line x1="44" y1="245" x2="320" y2="245" stroke="#ECEFF2" stroke-width="1" stroke-dasharray="2,3"/>
+
+  <!-- Patch shading -->
+  <g>
+    <rect x="52"  y="148" width="64" height="194" fill="#FF5A00" opacity="0.04"/>
+    <rect x="180" y="148" width="64" height="194" fill="#FF5A00" opacity="0.04"/>
+  </g>
+  <g stroke="#FF5A00" stroke-width="1" stroke-dasharray="3,3" opacity="0.45">
+    <line x1="116" y1="148" x2="116" y2="342"/>
+    <line x1="180" y1="148" x2="180" y2="342"/>
+    <line x1="244" y1="148" x2="244" y2="342"/>
+    <line x1="308" y1="148" x2="308" y2="342"/>
+  </g>
+
+  <!-- Waveform with fault spike, centered at y=245 (was 210, shifted +35) -->
+  <path d="M 52 245
+           C 60 227, 68 263, 76 243
+           C 84 223, 92 267, 100 241
+           C 108 219, 116 267, 124 243
+           C 132 223, 140 267, 148 243
+           C 152 243, 154 223, 158 209
+           L 162 193
+           L 168 285
+           L 174 197
+           L 180 281
+           L 184 243
+           C 196 223, 208 267, 220 243
+           C 232 223, 244 267, 256 243
+           C 268 223, 280 267, 292 243
+           C 304 223, 312 267, 318 243"
+        fill="none" stroke="#FF5A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Fault annotation -->
+  <g>
+    <line x1="172" y1="189" x2="172" y2="173"
+          stroke="#FF5A00" stroke-width="1" stroke-dasharray="2,2"/>
+    <rect x="142" y="155" width="60" height="18" rx="9" fill="#FFFFFF" stroke="#FF5A00" stroke-width="1"/>
+    <text x="172" y="167" text-anchor="middle" font-size="10" fill="#FF5A00" font-style="italic">fault event</text>
+  </g>
+
+  <!-- Patch label - inside plate at bottom -->
+  <g transform="translate(182, 358)">
+    <rect x="-50" y="0" width="100" height="18" rx="9" fill="#FFFFFF" stroke="#FF5A00" stroke-width="1"/>
+    <text x="0" y="13" text-anchor="middle" class="mono" font-size="10" fill="#FF5A00">patch · L = 4</text>
+  </g>
+
+
+  <!-- Arrow → Encoder (ends at diamond left vertex x=370) -->
+  <line x1="320" y1="245" x2="370" y2="245"
+        stroke="#FF5A00" stroke-width="1.8" marker-end="url(#arrow-orange-lg)"/>
+
+
+  <!-- Section 2: Transformer Encoder — trapezoid (narrows left→right, compression) -->
+  <path d="M 370 100 L 550 195 L 550 295 L 370 390 Z" fill="#122128"/>
+  <text x="460" y="232" text-anchor="middle" class="title" font-size="13" fill="#F1F4F6">Transformer</text>
+  <text x="460" y="251" text-anchor="middle" class="title" font-size="13" fill="#F1F4F6">Encoder</text>
+  <text x="460" y="270" text-anchor="middle" class="mono" font-size="10" fill="#C8CED2">4 layers · d = 128</text>
+
+
+  <!-- Arrow → FSQ (starts at diamond right vertex x=550) -->
+  <line x1="550" y1="245" x2="600" y2="245"
+        stroke="#FF5A00" stroke-width="1.8" marker-end="url(#arrow-orange-lg)"/>
+
+
+  <!-- Section 3: FSQ ============================== -->
+  <rect x="600" y="100" width="340" height="290" rx="10" fill="#FF5A00"/>
+  <text x="620" y="128" class="title" font-size="14" fill="#FFFFFF">FSQ</text>
+  <text x="620" y="146" font-size="10" fill="rgba(255,255,255,0.85)">snap each dim to one of 5 levels</text>
+
+  <text x="620" y="362" class="mono" font-size="11" fill="#FFFFFF">5⁴ = 625 codes</text>
+  <text x="620" y="378" class="mono" font-size="10" fill="rgba(255,255,255,0.85)">code (3, 2, 4, 1) → &lt;ts_412&gt;</text>
+
+  <!-- Lattice grid (5x5 slice of the 4D codebook), spacing 36 × 30 -->
+  <g transform="translate(770, 165)">
+    <!-- d1 axis label -->
+    <text x="72" y="180" text-anchor="middle" class="mono" font-size="9.5" fill="rgba(255,255,255,0.85)">d₁  (5 levels)</text>
+    <!-- d2 axis label (rotated) -->
+    <text x="-14" y="66" text-anchor="middle" class="mono" font-size="9.5" fill="rgba(255,255,255,0.85)"
+          transform="rotate(-90, -14, 66)">d₂  (5 levels)</text>
+
+    <!-- Grid lines -->
+    <g stroke="rgba(255,255,255,0.25)" stroke-width="0.8">
+      <line x1="0"   y1="0"   x2="144" y2="0"/>
+      <line x1="0"   y1="30"  x2="144" y2="30"/>
+      <line x1="0"   y1="60"  x2="144" y2="60"/>
+      <line x1="0"   y1="90"  x2="144" y2="90"/>
+      <line x1="0"   y1="120" x2="144" y2="120"/>
+      <line x1="0"   y1="0"   x2="0"   y2="120"/>
+      <line x1="36"  y1="0"   x2="36"  y2="120"/>
+      <line x1="72"  y1="0"   x2="72"  y2="120"/>
+      <line x1="108" y1="0"   x2="108" y2="120"/>
+      <line x1="144" y1="0"   x2="144" y2="120"/>
+    </g>
+
+    <!-- All 25 grid points -->
+    <g fill="rgba(255,255,255,0.55)">
+      <circle cx="0"   cy="0"   r="2.4"/>  <circle cx="36"  cy="0"   r="2.4"/>
+      <circle cx="72"  cy="0"   r="2.4"/>  <circle cx="108" cy="0"   r="2.4"/>
+      <circle cx="144" cy="0"   r="2.4"/>
+      <circle cx="0"   cy="30"  r="2.4"/>  <circle cx="36"  cy="30"  r="2.4"/>
+      <circle cx="72"  cy="30"  r="2.4"/>  <circle cx="108" cy="30"  r="2.4"/>
+      <circle cx="144" cy="30"  r="2.4"/>
+      <circle cx="0"   cy="60"  r="2.4"/>  <circle cx="36"  cy="60"  r="2.4"/>
+      <circle cx="72"  cy="60"  r="2.4"/>  <circle cx="108" cy="60"  r="2.4"/>
+      <circle cx="144" cy="60"  r="2.4"/>
+      <circle cx="0"   cy="90"  r="2.4"/>  <circle cx="36"  cy="90"  r="2.4"/>
+      <circle cx="72"  cy="90"  r="2.4"/>  <circle cx="108" cy="90"  r="2.4"/>
+      <circle cx="144" cy="90"  r="2.4"/>
+      <circle cx="0"   cy="120" r="2.4"/>  <circle cx="36"  cy="120" r="2.4"/>
+      <circle cx="72"  cy="120" r="2.4"/>  <circle cx="108" cy="120" r="2.4"/>
+      <circle cx="144" cy="120" r="2.4"/>
+    </g>
+
+    <!-- Continuous z inside Voronoi cell of (72, 60) -->
+    <circle cx="84" cy="74" r="3.6" fill="#FFFFFF" stroke="#122128" stroke-width="1"/>
+    <text x="94" y="78" class="mono" font-size="10" font-weight="600" fill="#FFFFFF">z</text>
+
+    <!-- Snap arrow -->
+    <line x1="82" y1="72" x2="74" y2="62"
+          stroke="#FFFFFF" stroke-width="2.2" marker-end="url(#arrow-white)"/>
+
+    <!-- Highlighted snap target -->
+    <circle cx="72" cy="60" r="4.5" fill="#FFFFFF"/>
+    <circle cx="72" cy="60" r="8"   fill="none" stroke="#FFFFFF" stroke-width="1.4"/>
+
+    <!-- Legend -->
+    <g transform="translate(8, 196)">
+      <circle cx="4" cy="3" r="3" fill="#FFFFFF" stroke="#122128" stroke-width="1"/>
+      <text x="12" y="6" class="mono" font-size="9" fill="rgba(255,255,255,0.9)">z</text>
+      <circle cx="42" cy="3" r="3" fill="#FFFFFF"/>
+      <text x="50" y="6" class="mono" font-size="9" fill="rgba(255,255,255,0.9)">snapped code</text>
+    </g>
+  </g>
+
+
+  <!-- Arrow → Tokens -->
+  <line x1="948" y1="245" x2="988" y2="245"
+        stroke="#FF5A00" stroke-width="1.8" marker-end="url(#arrow-orange-lg)"/>
+
+
+  <!-- Section 4: Output tokens — 8 stacked vertically (matches y=100-390 span) === -->
+  <g transform="translate(996, 110)">
+    <rect x="0" y="0"   width="148" height="28" rx="4" fill="rgba(255,90,0,0.08)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="74" y="19"  text-anchor="middle" class="mono" font-size="12" fill="#FF5A00">&lt;ts_412&gt;</text>
+
+    <rect x="0" y="36"  width="148" height="28" rx="4" fill="rgba(255,90,0,0.08)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="74" y="55"  text-anchor="middle" class="mono" font-size="12" fill="#FF5A00">&lt;ts_87&gt;</text>
+
+    <rect x="0" y="72"  width="148" height="28" rx="4" fill="rgba(255,90,0,0.08)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="74" y="91"  text-anchor="middle" class="mono" font-size="12" fill="#FF5A00">&lt;ts_553&gt;</text>
+
+    <rect x="0" y="108" width="148" height="28" rx="4" fill="rgba(255,90,0,0.08)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="74" y="127" text-anchor="middle" class="mono" font-size="12" fill="#FF5A00">&lt;ts_19&gt;</text>
+
+    <rect x="0" y="144" width="148" height="28" rx="4" fill="rgba(255,90,0,0.08)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="74" y="163" text-anchor="middle" class="mono" font-size="12" fill="#FF5A00">&lt;ts_234&gt;</text>
+
+    <rect x="0" y="180" width="148" height="28" rx="4" fill="rgba(255,90,0,0.08)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="74" y="199" text-anchor="middle" class="mono" font-size="12" fill="#FF5A00">&lt;ts_180&gt;</text>
+
+    <rect x="0" y="216" width="148" height="28" rx="4" fill="rgba(255,90,0,0.08)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="74" y="235" text-anchor="middle" class="mono" font-size="12" fill="#FF5A00">&lt;ts_56&gt;</text>
+
+    <text x="74" y="278" text-anchor="middle" class="mono" font-size="16" fill="#98A0A6">…</text>
+  </g>
+
+
+  <!-- Footer caption -->
+  <use href="#icon-lock" x="380" y="402" width="11" height="13"/>
+  <text x="396" y="412" font-size="11" fill="#6B767D">
+    625 codes · 100 % utilisation · 4 : 1 compression · tokenizer frozen after pretraining
+  </text>
+
+
+  <!-- ================================================================= -->
+  <!--  PANEL A → B  connector                                            -->
+  <!-- ================================================================= -->
+  <line x1="600" y1="450" x2="600" y2="486"
+        stroke="#FF5A00" stroke-width="2" marker-end="url(#arrow-orange-lg)"/>
+  <text x="615" y="473" font-size="11" font-style="italic" fill="#FF5A00">extend the LLM vocabulary</text>
+
+
+  <!-- ================================================================= -->
+  <!--  PANEL B — VOCABULARY EXTENSION  (horizontal)                      -->
+  <!-- ================================================================= -->
+  <rect x="20" y="496" width="1160" height="380" rx="10" fill="#FAFBFC" stroke="#E2E6EA" stroke-width="1"/>
+
+  <g transform="translate(44, 520)">
+    <rect x="0" y="0" width="22" height="22" rx="4" fill="#122128"/>
+    <text x="11" y="16" text-anchor="middle" class="mono" font-size="12" font-weight="600" fill="#FF9030">B</text>
+  </g>
+  <text x="76" y="537" class="title" font-size="16" fill="#1B2730">Vocabulary Extension</text>
+  <text x="76" y="555" class="eyebrow" font-size="10" fill="#6B767D">SHARED EMBEDDING SPACE</text>
+
+
+  <!-- Left side: vocabulary "union" stack ===================== -->
+  <g transform="translate(44, 580)">
+    <!-- Original -->
+    <use href="#icon-stack" x="0" y="3" width="14" height="14"/>
+    <text x="20" y="14" font-size="11" fill="#6B767D">Original vocabulary</text>
+    <text x="402" y="14" text-anchor="end" class="mono" font-size="10.5" fill="#6B767D">≈ 32 K</text>
+
+    <rect x="0" y="22" width="402" height="60" rx="6" fill="#FFFFFF" stroke="#E2E6EA" stroke-width="1"/>
+    <g>
+      <rect x="10" y="30" width="120" height="22" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+      <text x="70" y="45" text-anchor="middle" font-size="11" fill="#1B2730">"bearing"</text>
+
+      <rect x="138" y="30" width="120" height="22" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+      <text x="198" y="45" text-anchor="middle" font-size="11" fill="#1B2730">"fault"</text>
+
+      <rect x="266" y="30" width="126" height="22" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+      <text x="329" y="45" text-anchor="middle" font-size="11" fill="#1B2730">"vibration"</text>
+    </g>
+    <text x="201" y="74" text-anchor="middle" font-size="12" fill="#98A0A6">·  ·  ·</text>
+
+    <!-- + Signal -->
+    <use href="#icon-spark" x="0" y="100" width="12" height="12"/>
+    <text x="20" y="110" font-size="11" fill="#FF5A00">+ Signal-token vocabulary</text>
+    <text x="402" y="110" text-anchor="end" class="mono" font-size="10.5" fill="#FF5A00">+ 625</text>
+
+    <rect x="0" y="118" width="402" height="34" rx="6"
+          fill="rgba(255,90,0,0.05)" stroke="#FF5A00" stroke-width="1.2"/>
+    <rect x="10" y="124" width="382" height="22" rx="4"
+          fill="rgba(255,90,0,0.10)" stroke="#FF5A00" stroke-width="1"/>
+    <text x="201" y="139" text-anchor="middle" class="mono" font-size="11" fill="#FF5A00">
+      &lt;ts_0&gt; &#160;·&#160; &lt;ts_1&gt; &#160;·&#160; · · · &#160;·&#160; &lt;ts_624&gt;
+    </text>
+
+    <!-- + Delimiters -->
+    <use href="#icon-tag" x="0" y="172" width="13" height="13"/>
+    <text x="20" y="182" font-size="11" fill="#FF9030">+ Delimiter tokens</text>
+    <text x="402" y="182" text-anchor="end" class="mono" font-size="10.5" fill="#FF9030">+ 2</text>
+
+    <rect x="0"   y="190" width="194" height="28" rx="6"
+          fill="rgba(255,144,48,0.10)" stroke="#FF9030" stroke-width="1.2"/>
+    <text x="97"  y="208" text-anchor="middle" class="mono" font-size="11" fill="#FF9030">&lt;ts_start&gt;</text>
+
+    <rect x="208" y="190" width="194" height="28" rx="6"
+          fill="rgba(255,144,48,0.10)" stroke="#FF9030" stroke-width="1.2"/>
+    <text x="305" y="208" text-anchor="middle" class="mono" font-size="11" fill="#FF9030">&lt;ts_end&gt;</text>
+  </g>
+
+
+  <!-- Arrow Left → Right (vocab → scatter) -->
+  <line x1="460" y1="700" x2="496" y2="700"
+        stroke="#FF5A00" stroke-width="2" marker-end="url(#arrow-orange-lg)"/>
+  <text x="478" y="682" text-anchor="middle" class="eyebrow" font-size="9" fill="#FF5A00">embed</text>
+
+
+  <!-- Right side: t-SNE scatter ===================== -->
+  <text x="520" y="580" class="eyebrow" font-size="9.5" fill="#FF5A00">
+    ALL 32 627 TOKENS · ONE 4096-d EMBEDDING TABLE
+  </text>
+
+  <rect x="520" y="588" width="640" height="232" rx="6" fill="#FFFFFF" stroke="#E2E6EA" stroke-width="1"/>
+  <text x="534" y="604" class="eyebrow" font-size="8.5" fill="#98A0A6">t-SNE PROJECTION</text>
+
+  <!-- subtle grid -->
+  <g stroke="#ECEFF2" stroke-width="0.6">
+    <line x1="520" y1="640" x2="1160" y2="640"/>
+    <line x1="520" y1="700" x2="1160" y2="700"/>
+    <line x1="520" y1="760" x2="1160" y2="760"/>
+    <line x1="680" y1="588" x2="680" y2="820"/>
+    <line x1="840" y1="588" x2="840" y2="820"/>
+    <line x1="1000" y1="588" x2="1000" y2="820"/>
+  </g>
+
+  <!-- Original-vocab dots (gray) — spread -->
+  <g fill="#98A0A6">
+    <circle cx="560" cy="618" r="1.8"/>  <circle cx="580" cy="640" r="1.8"/>
+    <circle cx="600" cy="628" r="1.8"/>  <circle cx="620" cy="660" r="1.8"/>
+    <circle cx="660" cy="635" r="1.8"/>  <circle cx="680" cy="660" r="1.8"/>
+    <circle cx="700" cy="645" r="1.8"/>  <circle cx="720" cy="665" r="1.8"/>
+    <circle cx="760" cy="780" r="1.8"/>  <circle cx="780" cy="700" r="1.8"/>
+    <circle cx="810" cy="650" r="1.8"/>  <circle cx="830" cy="765" r="1.8"/>
+    <circle cx="850" cy="690" r="1.8"/>  <circle cx="870" cy="650" r="1.8"/>
+    <circle cx="900" cy="755" r="1.8"/>  <circle cx="920" cy="680" r="1.8"/>
+    <circle cx="940" cy="780" r="1.8"/>  <circle cx="970" cy="650" r="1.8"/>
+    <circle cx="990" cy="720" r="1.8"/>  <circle cx="1020" cy="690" r="1.8"/>
+    <circle cx="1050" cy="745" r="1.8"/>  <circle cx="1070" cy="668" r="1.8"/>
+    <circle cx="1100" cy="700" r="1.8"/>  <circle cx="1130" cy="745" r="1.8"/>
+    <circle cx="620" cy="775" r="1.8"/>  <circle cx="660" cy="745" r="1.8"/>
+    <circle cx="830" cy="630" r="1.8"/>  <circle cx="950" cy="788" r="1.8"/>
+    <circle cx="1075" cy="780" r="1.8"/> <circle cx="1130" cy="635" r="1.8"/>
+    <circle cx="540" cy="700" r="1.8"/>  <circle cx="568" cy="755" r="1.8"/>
+    <circle cx="600" cy="720" r="1.8"/>
+  </g>
+
+  <!-- Signal-token cluster -->
+  <g fill="#FF5A00">
+    <circle cx="710" cy="720" r="2.6"/>  <circle cx="725" cy="728" r="2.6"/>
+    <circle cx="722" cy="710" r="2.6"/>  <circle cx="736" cy="712" r="2.6"/>
+    <circle cx="744" cy="730" r="2.6"/>  <circle cx="702" cy="734" r="2.6"/>
+    <circle cx="732" cy="700" r="2.6"/>  <circle cx="752" cy="720" r="2.6"/>
+    <circle cx="716" cy="700" r="2.6"/>  <circle cx="732" cy="744" r="2.6"/>
+    <circle cx="756" cy="738" r="2.6"/>  <circle cx="696" cy="720" r="2.6"/>
+  </g>
+  <ellipse cx="728" cy="720" rx="48" ry="26" fill="none" stroke="#FF5A00" stroke-width="0.9" stroke-dasharray="3,3" opacity="0.6"/>
+
+  <!-- Delimiter dots -->
+  <g fill="#FF9030">
+    <circle cx="790" cy="722" r="2.6"/>
+    <circle cx="798" cy="714" r="2.6"/>
+  </g>
+
+  <!-- Callouts -->
+  <g>
+    <line x1="720" y1="660" x2="720" y2="688" stroke="#FF5A00" stroke-width="0.9"/>
+    <rect x="650" y="646" width="140" height="16" rx="3" fill="#FFFFFF" stroke="#FF5A00" stroke-width="0.9"/>
+    <text x="720" y="657" text-anchor="middle" class="mono" font-size="10" fill="#FF5A00">signal tokens · 625</text>
+  </g>
+  <g>
+    <line x1="820" y1="656" x2="798" y2="712" stroke="#FF9030" stroke-width="0.9"/>
+    <rect x="794" y="646" width="120" height="16" rx="3" fill="#FFFFFF" stroke="#FF9030" stroke-width="0.9"/>
+    <text x="854" y="657" text-anchor="middle" class="mono" font-size="10" fill="#FF9030">delimiters · 2</text>
+  </g>
+  <g>
+    <line x1="1020" y1="666" x2="1050" y2="730" stroke="#6B767D" stroke-width="0.9"/>
+    <rect x="990" y="646" width="130" height="16" rx="3" fill="#FFFFFF" stroke="#98A0A6" stroke-width="0.9"/>
+    <text x="1055" y="657" text-anchor="middle" font-size="10" fill="#6B767D">original text vocab · 32 K</text>
+  </g>
+
+  <!-- Footer caption -->
+  <text x="600" y="852" text-anchor="middle" font-size="11" fill="#6B767D">
+    627 new embeddings (signal + delimiter) trained end-to-end with the LLM
+  </text>
+
+
+  <!-- ================================================================= -->
+  <!--  PANEL B → C  connector                                            -->
+  <!-- ================================================================= -->
+  <line x1="600" y1="886" x2="600" y2="922"
+        stroke="#FF5A00" stroke-width="2" marker-end="url(#arrow-orange-lg)"/>
+  <text x="615" y="909" font-size="11" font-style="italic" fill="#FF5A00">unify into one input sequence</text>
+
+
+  <!-- ================================================================= -->
+  <!--  PANEL C — LLM REASONING  (horizontal)                             -->
+  <!-- ================================================================= -->
+  <rect x="20" y="932" width="1160" height="396" rx="10" fill="#FAFBFC" stroke="#E2E6EA" stroke-width="1"/>
+
+  <g transform="translate(44, 956)">
+    <rect x="0" y="0" width="22" height="22" rx="4" fill="#122128"/>
+    <text x="11" y="16" text-anchor="middle" class="mono" font-size="12" font-weight="600" fill="#FF9030">C</text>
+  </g>
+  <text x="76" y="973" class="title" font-size="16" fill="#1B2730">LLM Reasoning</text>
+  <text x="76" y="991" class="eyebrow" font-size="10" fill="#6B767D">UNIFIED SEQUENCE · SELF-ATTENTION</text>
+
+
+  <!-- Input sequence rows ==================== -->
+  <text x="44" y="1020" font-size="11" fill="#6B767D">Input sequence</text>
+
+  <!-- Row 1: scale context -->
+  <g transform="translate(44, 1028)">
+    <rect x="0"   y="0" width="62" height="28" rx="4" fill="#122128"/>
+    <text x="31"  y="19" text-anchor="middle" class="mono" font-size="10.5" fill="#FF9030">[user]</text>
+
+    <rect x="70"  y="0" width="68" height="28" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+    <text x="104" y="19" text-anchor="middle" font-size="11" fill="#1B2730">Signal:</text>
+
+    <rect x="146" y="0" width="96" height="28" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+    <text x="194" y="19" text-anchor="middle" class="mono" font-size="11" fill="#1B2730">mean = 0.12</text>
+
+    <rect x="250" y="0" width="86" height="28" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+    <text x="293" y="19" text-anchor="middle" class="mono" font-size="11" fill="#1B2730">std = 0.87</text>
+  </g>
+  <line x1="114" y1="1062" x2="380" y2="1062" stroke="#98A0A6" stroke-width="1"/>
+  <text x="247" y="1075" text-anchor="middle" class="eyebrow" font-size="9" fill="#6B767D">SCALE CONTEXT</text>
+
+  <!-- Row 2: signal tokens -->
+  <g transform="translate(44, 1086)">
+    <rect x="0"   y="0" width="76" height="28" rx="4" fill="rgba(255,144,48,0.10)" stroke="#FF9030" stroke-width="1.2"/>
+    <text x="38"  y="19" text-anchor="middle" class="mono" font-size="11" fill="#FF9030">&lt;ts_start&gt;</text>
+
+    <rect x="84"  y="0" width="72" height="28" rx="4" fill="rgba(255,90,0,0.10)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="120" y="19" text-anchor="middle" class="mono" font-size="11" fill="#FF5A00">&lt;ts_412&gt;</text>
+
+    <rect x="164" y="0" width="64" height="28" rx="4" fill="rgba(255,90,0,0.10)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="196" y="19" text-anchor="middle" class="mono" font-size="11" fill="#FF5A00">&lt;ts_87&gt;</text>
+
+    <rect x="236" y="0" width="72" height="28" rx="4" fill="rgba(255,90,0,0.10)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="272" y="19" text-anchor="middle" class="mono" font-size="11" fill="#FF5A00">&lt;ts_553&gt;</text>
+
+    <rect x="316" y="0" width="64" height="28" rx="4" fill="rgba(255,90,0,0.10)" stroke="#FF5A00" stroke-width="1.2"/>
+    <text x="348" y="19" text-anchor="middle" class="mono" font-size="11" fill="#FF5A00">&lt;ts_19&gt;</text>
+
+    <text x="398" y="20" text-anchor="middle" class="mono" font-size="14" fill="#98A0A6">…</text>
+
+    <rect x="416" y="0" width="64" height="28" rx="4" fill="rgba(255,144,48,0.10)" stroke="#FF9030" stroke-width="1.2"/>
+    <text x="448" y="19" text-anchor="middle" class="mono" font-size="11" fill="#FF9030">&lt;ts_end&gt;</text>
+  </g>
+  <line x1="44" y1="1120" x2="524" y2="1120" stroke="#FF5A00" stroke-width="1" opacity="0.6"/>
+  <text x="284" y="1133" text-anchor="middle" class="eyebrow" font-size="9" fill="#FF5A00">SIGNAL TOKENS</text>
+
+  <!-- Row 3: task prompt -->
+  <g transform="translate(44, 1144)">
+    <rect x="0"   y="0" width="60" height="28" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+    <text x="30"  y="19" text-anchor="middle" font-size="11" fill="#1B2730">What</text>
+
+    <rect x="64"  y="0" width="56" height="28" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+    <text x="92"  y="19" text-anchor="middle" font-size="11" fill="#1B2730">fault</text>
+
+    <rect x="128" y="0" width="36" height="28" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+    <text x="146" y="19" text-anchor="middle" font-size="11" fill="#1B2730">is</text>
+
+    <rect x="172" y="0" width="84" height="28" rx="4" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+    <text x="214" y="19" text-anchor="middle" font-size="11" fill="#1B2730">present?</text>
+
+    <rect x="264" y="0" width="56" height="28" rx="4" fill="#122128"/>
+    <text x="292" y="19" text-anchor="middle" class="mono" font-size="10.5" fill="#FF9030">[asst]</text>
+  </g>
+  <line x1="44" y1="1178" x2="364" y2="1178" stroke="#122128" stroke-width="1"/>
+  <text x="204" y="1191" text-anchor="middle" class="eyebrow" font-size="9" fill="#6B767D">TASK PROMPT</text>
+
+
+  <!-- LLM architecture: Embed → Transformer × 36 → LM head ====================== -->
+  <!-- Whole backbone + output wrapped in a translate(+12, 0) so there's a 12 px
+       gap between <ts_end> and the input → Embed arrow. -->
+  <g transform="translate(12, 0)">
+
+  <!-- "Backbone" container card — y=1009-1159, center y=1084 (matches inner boxes + OUTPUT) -->
+  <rect x="570" y="1009" width="392" height="150" rx="10"
+        fill="#FFFFFF" stroke="#C8CED4" stroke-width="1.2"/>
+
+  <text x="588" y="1027" class="eyebrow" font-size="9" fill="#6B767D">LLM BACKBONE · DoRA FINE-TUNING</text>
+
+  <!-- Embedding box  (x: 544-594) -->
+  <rect x="584" y="1034" width="50" height="100" rx="6" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+  <text x="609" y="1078" text-anchor="middle" font-size="11" fill="#1B2730">Embed</text>
+  <text x="609" y="1093" text-anchor="middle" font-size="11" fill="#1B2730">lookup</text>
+  <text x="609" y="1112" text-anchor="middle" class="mono" font-size="9" fill="#6B767D">d = 4096</text>
+
+  <!-- Transformer block container (x: front 614-814, shadow extends to ~818) -->
+  <g>
+    <rect x="678" y="1042" width="180" height="100" rx="8" fill="#FFFFFF" stroke="#122128" stroke-width="0.6" opacity="0.35"/>
+    <rect x="676" y="1038" width="180" height="100" rx="8" fill="#FFFFFF" stroke="#122128" stroke-width="0.8" opacity="0.55"/>
+    <rect x="674" y="1034" width="180" height="100" rx="8" fill="#FFFFFF" stroke="#122128" stroke-width="1.2"/>
+  </g>
+  <!-- ×36 badge -->
+  <g transform="translate(814, 1040)">
+    <rect x="0" y="0" width="32" height="16" rx="8" fill="#122128"/>
+    <text x="16" y="11" text-anchor="middle" class="mono" font-size="9" font-weight="600" fill="#FF9030">×36</text>
+  </g>
+  <text x="688" y="1053" class="eyebrow" font-size="9" fill="#122128">TRANSFORMER BLOCK</text>
+  <!-- Self-Attention pill -->
+  <rect x="688" y="1060" width="106" height="22" rx="4" fill="#122128"/>
+  <text x="741" y="1075" text-anchor="middle" font-size="10.5" fill="#F1F4F6">Self-Attention</text>
+  <!-- Down arrow inside block -->
+  <line x1="741" y1="1084" x2="741" y2="1094"
+        stroke="#122128" stroke-width="1" marker-end="url(#arrow-navy)"/>
+  <!-- Feed-Forward pill -->
+  <rect x="688" y="1100" width="106" height="22" rx="4" fill="#122128"/>
+  <text x="741" y="1115" text-anchor="middle" font-size="10.5" fill="#F1F4F6">Feed-Forward</text>
+  <!-- DoRA branches -->
+  <line x1="794" y1="1071" x2="810" y2="1071" stroke="#FF9030" stroke-width="1.4"/>
+  <rect x="810" y="1062" width="40" height="18" rx="4" fill="rgba(255,144,48,0.12)" stroke="#FF9030" stroke-width="1"/>
+  <text x="830" y="1075" text-anchor="middle" class="mono" font-size="9" font-weight="600" fill="#FF9030">DoRA</text>
+
+  <line x1="794" y1="1111" x2="810" y2="1111" stroke="#FF9030" stroke-width="1.4"/>
+  <rect x="810" y="1102" width="40" height="18" rx="4" fill="rgba(255,144,48,0.12)" stroke="#FF9030" stroke-width="1"/>
+  <text x="830" y="1115" text-anchor="middle" class="mono" font-size="9" font-weight="600" fill="#FF9030">DoRA</text>
+
+  <!-- LM head box  (x: 838-888) -->
+  <rect x="898" y="1034" width="50" height="100" rx="6" fill="#F3F5F7" stroke="#E2E6EA" stroke-width="1"/>
+  <text x="923" y="1078" text-anchor="middle" font-size="11" fill="#1B2730">LM</text>
+  <text x="923" y="1093" text-anchor="middle" font-size="11" fill="#1B2730">head</text>
+  <text x="923" y="1112" text-anchor="middle" class="mono" font-size="9" fill="#6B767D">→ logits</text>
+
+  <!-- ─── 4 connecting arrows: same length (20 px), same stroke + smaller marker (7px head) ─── -->
+
+  <!-- Input arrow: stops at the backbone container left edge (x=570) instead of
+       crossing into it. -->
+  <line x1="524" y1="1084" x2="570" y2="1084"
+        stroke="#FF5A00" stroke-width="1.8" marker-end="url(#arrow-orange)"/>
+
+  <!-- Arrow 2: Embed (right edge x=594) → Transformer (left edge x=614) -->
+  <line x1="634" y1="1084" x2="674" y2="1084"
+        stroke="#FF5A00" stroke-width="1.8" marker-end="url(#arrow-orange)"/>
+
+  <!-- Arrow 3: Transformer (shadow right edge x=818) → LM head (left edge x=838) -->
+  <line x1="858" y1="1084" x2="898" y2="1084"
+        stroke="#FF5A00" stroke-width="1.8" marker-end="url(#arrow-orange)"/>
+
+  <!-- Arrow 4: LM head (right edge x=888) → OUTPUT (left edge x=908) -->
+  <line x1="948" y1="1084" x2="988" y2="1084"
+        stroke="#FF5A00" stroke-width="1.8" marker-end="url(#arrow-orange)"/>
+
+
+  <!-- Output card (x: 908-1148, y: 1009-1159, 150 tall, center y=1084 same as backbone) -->
+  <g>
+    <rect x="988" y="1009" width="180" height="150" rx="6" fill="#FFFFFF" stroke="#E2E6EA" stroke-width="1"/>
+    <rect x="988" y="1009" width="4"   height="150" fill="#FF5A00"/>
+    <use href="#icon-quote" x="1006" y="1024" width="14" height="14"/>
+    <text x="1026" y="1034" class="eyebrow" font-size="9.5" fill="#FF5A00">OUTPUT</text>
+    <text x="1006" y="1062" font-size="12" fill="#1B2730" font-style="italic">Outer-race bearing fault.</text>
+    <text x="1006" y="1088" font-size="12" fill="#1B2730" font-style="italic">The 162 Hz peak +</text>
+    <text x="1006" y="1106" font-size="12" fill="#1B2730" font-style="italic">shaft-speed sidebands</text>
+    <text x="1006" y="1124" font-size="12" fill="#1B2730" font-style="italic">match BPFI signature.</text>
+  </g>
+
+  </g>  <!-- end backbone+output translate(12,0) -->
+
+  <!-- Panel C footer -->
+  <text x="600" y="1300" text-anchor="middle" font-size="11" fill="#6B767D">
+    DoRA adapters + 627 new embeddings · &lt; 1 % of LLM parameters trained
+  </text>
+
+</svg>

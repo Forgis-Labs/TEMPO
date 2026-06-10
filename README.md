@@ -7,10 +7,20 @@
 
 TEMPO is a backbone-agnostic framework that turns any decoder-only LLM into a time-series reasoner. Signals are encoded into discrete tokens by a small FSQ-Transformer quantizer, aligned with the LLM's embedding space in a Phase 0 pass, and trained to answer questions and classify patterns in a Phase 1 pass.
 
-![TEMPO Architecture](assets/architecture.png)
+![TEMPO Architecture](assets/architecture.svg)
 
-> [!IMPORTANT]
-> **Work in progress.** Full model checkpoints and training code coming soon.
+> [!WARNING]
+> **This repository is not yet functional.** Model checkpoints and trained weights are not publicly released — you cannot run inference or reproduce results without them. Full release coming soon.
+
+## Architecture
+
+Three components, trained in sequence:
+
+1. **Tokenizer** (1.6M params, frozen after pre-training). Maps normalized real-valued samples to discrete codes via FSQ-Transformer with `levels = [5,5,5,5]` (625 codes, 4:1 compression).
+
+2. **Phase 0: Alignment.** LLM frozen; a small projection is trained so that tokenizer code embeddings align with the LLM's input space.
+
+3. **Phase 1: Instruction tuning.** LoRA/DoRA adapters trained on downstream tasks (MCQ, captioning, CoT, classification) with signal tokens inlined into the chat template.
 
 ## Install
 
@@ -22,7 +32,7 @@ uv pip install -e .
 
 Python >= 3.10. Dependencies listed in [pyproject.toml](pyproject.toml).
 
-## Quick Start
+## Quick Start [WIP]
 
 ### Inference
 
@@ -38,25 +48,6 @@ model = tempo.TEMPO.from_pretrained(
 
 answer = model.analyze(signal, question="Describe the trend in this signal.")
 ```
-
-### Gradio demo
-
-```bash
-uv run --with gradio python scripts/demos/demo_gradio.py \
-    --checkpoint   checkpoints/phase1_best.pt \
-    --tokenizer-ckpt checkpoints/fsq_transformer_rope_625_best.pt \
-    --llm-id Qwen/Qwen3-1.7B
-```
-
-## Architecture
-
-Three components, trained in sequence:
-
-1. **Tokenizer** (1.6M params, frozen after pre-training). Maps normalized real-valued samples to discrete codes via FSQ-Transformer with `levels = [5,5,5,5]` (625 codes, 4:1 compression).
-
-2. **Phase 0: Alignment.** LLM frozen; a small projection is trained so that tokenizer code embeddings align with the LLM's input space.
-
-3. **Phase 1: Instruction tuning.** LoRA/DoRA adapters trained on downstream tasks (MCQ, captioning, CoT, classification) with signal tokens inlined into the chat template.
 
 ## Training
 

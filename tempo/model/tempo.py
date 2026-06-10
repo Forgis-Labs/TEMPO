@@ -1,21 +1,22 @@
 """TEMPO: Time Series Understanding via Discrete Tokenization.
 
-Single model class that handles inference, training, and forecasting.
-No separate model files, no inconsistent APIs.
+Single model class that handles inference and training.
 
 Architecture:
-    raw signal → TOTEM encoder (frozen 1D CNN, 4:1 compression)
-              → VQ codebook (256 discrete codes)
-              → <ts_start> <ts_0>..<ts_255> <ts_end> in LLM vocabulary
+    raw signal → FSQ-Transformer encoder (frozen, 4:1 compression)
+              → discrete codebook (625 codes, levels=[5,5,5,5])
+              → <ts_start> <ts_0>..<ts_624> <ts_end> in LLM vocabulary
               → LLM (frozen backbone + LoRA/DoRA adapters)
 
 Usage:
     from tempo import TEMPO, TEMPOConfig
 
     # Inference
-    model = TEMPO.from_pretrained("checkpoint.pt", totem_ckpt="totem.pt")
+    model = TEMPO.from_pretrained(
+        "checkpoints/phase1_best.pt",
+        fsq_ckpt="checkpoints/fsq_transformer_625_best.pt",
+    )
     answer = model.analyze(signal, "What is the trend?")
-    forecast = model.forecast(signal, horizon=64)
 
     # Training
     model = TEMPO(TEMPOConfig(llm_id="Qwen/Qwen3-4B"))
@@ -50,7 +51,7 @@ class TEMPOConfig:
     llm_id: str = "Qwen/Qwen3-4B"
 
     # Tokenizer
-    tokenizer_type: str = "totem"  # "totem" or "fsq"
+    tokenizer_type: str = "fsq_transformer"  # "fsq_transformer", "fsq", or "totem"
     totem_ckpt: str | None = None
     fsq_ckpt: str | None = None
     n_bins: int = 256              # auto-set from tokenizer for FSQ
@@ -115,18 +116,18 @@ class TEMPO(nn.Module):
                 config.compression_factor = self.ts_tokenizer.config.compression
             else:
                 raise ValueError("FSQ tokenizer requires fsq_ckpt path")
-            self.totem = None  # for backward compat
+            self.totem = None
         else:
-            # TOTEM (default)
+            # TOTEM
             if config.totem_ckpt and os.path.exists(config.totem_ckpt):
                 self.ts_tokenizer = TOTEMTokenizer.from_pretrained(config.totem_ckpt)
                 config.n_bins = self.ts_tokenizer.codebook_size
-                config.compression_factor = 4  # TOTEM always uses 4:1
+                config.compression_factor = 4
             else:
                 self.ts_tokenizer = TOTEMTokenizer(num_embeddings=config.n_bins)
                 self.ts_tokenizer.eval()
                 self.ts_tokenizer.requires_grad_(False)
-            self.totem = self.ts_tokenizer  # backward compat
+            self.totem = self.ts_tokenizer
 
         print(f"Tokenizer: {config.tokenizer_type}, {config.n_bins} codes, "
               f"{config.compression_factor}:1 compression")
@@ -749,11 +750,11 @@ class TEMPO(nn.Module):
 
         Args:
             checkpoint_path: Path to .pt file with model_state.
-            totem_ckpt: Path to TOTEM VQ-VAE checkpoint.
+            fsq_ckpt: Path to FSQ-Transformer checkpoint.
             llm_id: HuggingFace model ID for the base LLM.
             device: Device to load onto.
-            tokenizer_type: "totem", "fsq", or "fsq_transformer".
-            fsq_ckpt: Path to FSQ/FSQ-Transformer checkpoint.
+            tokenizer_type: "fsq_transformer" (default), "fsq", or "totem".
+            totem_ckpt: Path to TOTEM checkpoint (alternative tokenizer).
             **config_overrides: Override any TEMPOConfig field.
 
         Returns:
@@ -765,22 +766,18 @@ class TEMPO(nn.Module):
         saved_config = ckpt.get("config", {})
 
         # Determine tokenizer type from args, saved config, or default
-        tok_type = tokenizer_type or saved_config.get("tokenizer_type", "totem")
+        tok_type = tokenizer_type or saved_config.get("tokenizer_type", "fsq_transformer")
 
-        # CLI args take priority over saved SageMaker paths
-        def _resolve(cli_val, saved_key, cli_default):
-            saved_val = saved_config.get(saved_key, "")
-            if cli_val and cli_val != cli_default:
+        def _resolve(cli_val, saved_key):
+            if cli_val:
                 return cli_val
-            if saved_val and not saved_val.startswith("/opt/ml"):
-                return saved_val
-            return cli_val  # fall back to CLI default
+            return saved_config.get(saved_key) or cli_val
 
         config = TEMPOConfig(
-            llm_id=_resolve(llm_id, "llm_id", "Qwen/Qwen3-4B"),
+            llm_id=_resolve(llm_id, "llm_id") or "Qwen/Qwen3-4B",
             tokenizer_type=tok_type,
-            totem_ckpt=_resolve(totem_ckpt, "totem_ckpt", None),
-            fsq_ckpt=_resolve(fsq_ckpt, "fsq_ckpt", None),
+            totem_ckpt=_resolve(totem_ckpt, "totem_ckpt"),
+            fsq_ckpt=_resolve(fsq_ckpt, "fsq_ckpt"),
             **{k: v for k, v in config_overrides.items() if hasattr(TEMPOConfig, k)},
         )
 
