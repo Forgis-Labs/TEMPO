@@ -71,7 +71,7 @@ print(result.accuracy, result.f1_macro)
 ## Citation
 
 ```bibtex
-@misc{forgis2026tempo,
+@misc{2026tempo,
   title  = {TEMPO: Time Series Understanding via Discrete Tokenization},
   year   = {2026},
   url    = {https://github.com/Forgis-Labs/TEMPO},
