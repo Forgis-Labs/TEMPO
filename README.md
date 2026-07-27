@@ -1,6 +1,6 @@
 # TEMPO: Time Series Understanding via Discrete Tokenization
 
-[![Website](https://img.shields.io/badge/Website-forgis.com-orange)](https://www.forgis.com)
+
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
@@ -73,7 +73,6 @@ print(result.accuracy, result.f1_macro)
 ```bibtex
 @misc{forgis2026tempo,
   title  = {TEMPO: Time Series Understanding via Discrete Tokenization},
-  author = {Forgis},
   year   = {2026},
   url    = {https://github.com/Forgis-Labs/TEMPO},
 }
@@ -82,4 +81,3 @@ print(result.accuracy, result.f1_macro)
 ## License
 
 [CC BY-NC-SA 4.0](LICENSE) — free for research and non-commercial use.
-For commercial licensing, contact [riccardo.maggioni@forgis.com](mailto:riccardo.maggioni@forgis.com).
