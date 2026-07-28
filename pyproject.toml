@@ -8,9 +8,6 @@ version = "0.2.0"
 description = "Time Series Understanding via Discrete Tokenization"
 license = {text = "CC-BY-NC-SA-4.0"}
 requires-python = ">=3.10"
-authors = [
-    {name = "Forgis"},
-]
 dependencies = [
     "torch>=2.0",
     "transformers>=4.40",
